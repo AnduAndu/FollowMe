@@ -7,6 +7,9 @@ public class UserVO {
 	private String lastName;
 	private String emailID;
 	private String gender;
+	private long lastLoggedInTime;
+	private String loggedInWith;
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -36,6 +39,18 @@ public class UserVO {
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+	public long getLastLoggedInTime() {
+		return lastLoggedInTime;
+	}
+	public void setLastLoggedInTime(long lastLoggedInTime) {
+		this.lastLoggedInTime = lastLoggedInTime;
+	}
+	public String getLoggedInWith() {
+		return loggedInWith;
+	}
+	public void setLoggedInWith(String loggedInWith) {
+		this.loggedInWith = loggedInWith;
 	}
 	
 	
