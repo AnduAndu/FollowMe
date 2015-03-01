@@ -1,5 +1,7 @@
 package com.anduandu.user;
 
+import java.util.Date;
+
 public class UserVO {
 
 	private String userName;
@@ -7,8 +9,8 @@ public class UserVO {
 	private String lastName;
 	private String emailID;
 	private String gender;
-	private long lastLoggedInTime;
-	private String loggedInWith;
+	private Date lastLoggedInTime;
+	private LoggedInWith loggedInWith;
 	
 	public String getUserName() {
 		return userName;
@@ -40,17 +42,17 @@ public class UserVO {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public long getLastLoggedInTime() {
+	public Date getLastLoggedInTime() {
 		return lastLoggedInTime;
 	}
-	public void setLastLoggedInTime(long lastLoggedInTime) {
+	public void setLastLoggedInTime(Date lastLoggedInTime) {
 		this.lastLoggedInTime = lastLoggedInTime;
 	}
-	public String getLoggedInWith() {
+	public LoggedInWith getLoggedInWith() {
 		return loggedInWith;
 	}
-	public void setLoggedInWith(String loggedInWith) {
-		this.loggedInWith = loggedInWith;
+	public void setLoggedInWith(LoggedInWith facebook) {
+		this.loggedInWith = facebook;
 	}
 	
 	

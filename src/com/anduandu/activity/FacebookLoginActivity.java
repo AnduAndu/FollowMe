@@ -1,6 +1,7 @@
 package com.anduandu.activity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.anduandu.followme.R;
+import com.anduandu.user.LoggedInWith;
 import com.anduandu.user.UserVO;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -49,12 +51,16 @@ public class FacebookLoginActivity extends Activity {
 
 					if (user != null) {
 						
+						Calendar calendar = Calendar.getInstance();
 						userVO = new UserVO();
 						userVO.setUserName(user.getName());
 						userVO.setFirstName(user.getFirstName());
 						userVO.setLastName(user.getLastName());
 						userVO.setEmailID(user.getProperty("email").toString());
 						userVO.setGender(user.getProperty("gender").toString());
+						userVO.setLastLoggedInTime(calendar.getTime());
+						userVO.setLoggedInWith(LoggedInWith.Facebook);
+						Log.d("Current time", calendar.getTime().toString());
 						
 						showMsg(user.getName());
 						showMsg(user.getProperty("email") + "");
