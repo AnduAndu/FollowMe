@@ -17,6 +17,7 @@ import com.anduandu.network.NetworkUtil;
 
 public class HomeScreen extends ActionBarActivity {
 
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +26,7 @@ public class HomeScreen extends ActionBarActivity {
 		IntentFilter intentFilter = new IntentFilter(
 				ConnectivityManager.CONNECTIVITY_ACTION);
 		registerReceiver(networkStateReceiver, intentFilter);
-
+		
 	}
 
 	BroadcastReceiver networkStateReceiver = new BroadcastReceiver() {
