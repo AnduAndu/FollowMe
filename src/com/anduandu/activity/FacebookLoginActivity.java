@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anduandu.followme.R;
@@ -38,6 +39,8 @@ import com.google.android.gms.plus.model.people.Person.Name;
 
 public class FacebookLoginActivity extends Activity implements OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 
+	private Button googleSignOutButton; 
+	private SignInButton googleSignInButton;
 	private static final int RC_SIGN_IN = 0;
 	private UserVO userVO;
 	private UiLifecycleHelper uiLifecycleHelper;
@@ -58,9 +61,10 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 		List<String> permissions = FacebookUtil.getPermissions();
 		faecbookLoginButton.setPublishPermissions(permissions);
 		
-		SignInButton googleSignInButton = (SignInButton) findViewById(R.id.signinGoogle);
+		googleSignInButton = (SignInButton) findViewById(R.id.signinGoogle);
 		googleSignInButton.setOnClickListener(this);
 		googleApiClient = getGoogleAPIClient();
+		googleSignOutButton = (Button) findViewById(R.id.googleLogout);
 		
 	}
 	
@@ -152,6 +156,17 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 		return userVO;
 	}
 
+	private void updateStatus(boolean isSignedIn) {
+		if(isSignedIn) {
+			googleSignOutButton.setVisibility(View.VISIBLE);
+			googleSignInButton.setVisibility(View.GONE);
+		}
+		else {
+			googleSignOutButton.setVisibility(View.GONE);
+			googleSignInButton.setVisibility(View.VISIBLE);
+		}
+	}
+	
 	private void resolveSignInError() {
 		if (connectionResult.hasResolution()) {
 			try {
@@ -211,6 +226,7 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 			if (currentPerson != null) {
 				UserVO userVO = createGoogleUserAndStoreDetails(currentPerson);
 				logUserDetails(userVO);
+				updateStatus(true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -244,6 +260,7 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 	@Override
 	public void onConnectionSuspended(int cause) {
 		googleApiClient.connect();
+		updateStatus(false);
 	}
 
 	@Override
@@ -274,6 +291,7 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 			Plus.AccountApi.clearDefaultAccount(googleApiClient);
 			googleApiClient.disconnect();
 			googleApiClient.connect();
+			updateStatus(false);
 		}
 	}
 	

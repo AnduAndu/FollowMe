@@ -2180,6 +2180,7 @@ containing a value of this type.
         public static final int facebook_app_id=0x7f070050;
         public static final int hello_world=0x7f07004e;
         public static final int not_connected=0x7f070051;
+        public static final int signout_from_google=0x7f070053;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
         /**  Text on a placeholder buy button when Google Play services is not
