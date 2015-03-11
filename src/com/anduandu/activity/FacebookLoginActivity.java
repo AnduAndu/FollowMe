@@ -12,12 +12,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.anduandu.dao.UserDataFetcher;
+import com.anduandu.dao.UserDataFetcherFactory;
 import com.anduandu.followme.R;
 import com.anduandu.user.LoggedInWith;
+import com.anduandu.user.UserDetailsWrapper;
 import com.anduandu.user.UserVO;
-import com.anduandu.util.CalendarUtil;
 import com.anduandu.util.FacebookUtil;
-import com.anduandu.util.UserUtil;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -35,7 +36,6 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.plus.People;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.Person.Name;
 
 public class FacebookLoginActivity extends Activity implements OnClickListener, ConnectionCallbacks, OnConnectionFailedListener {
 
@@ -123,7 +123,10 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 
 					Log.d("user created", "in completed");
 					if (user != null) {
-						userVO = createFacebookUserAndStoreDetails(user);
+						UserDataFetcher userDataFetcher = UserDataFetcherFactory.getInstance().getUserDataFetcher(LoggedInWith.Facebook);
+						UserDetailsWrapper userDetailsWrapper = new UserDetailsWrapper();
+						userDetailsWrapper.setGraphUser(user);
+						userVO = userDataFetcher.fetchUserDetails(userDetailsWrapper);
 						Log.d("user created", userVO.getLoggedInWith().getLoggedInWith());
 						logUserDetails(userVO);
 					} else {
@@ -141,19 +144,6 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 		} else if (state.isClosed()) {
 			Log.i("facebook", "Logged out...");
 		}
-	}
-	
-	private UserVO createFacebookUserAndStoreDetails(GraphUser user) {
-		
-		userVO = new UserVO();
-		userVO.setUserName(user.getName());
-		userVO.setFirstName(user.getFirstName());
-		userVO.setLastName(user.getLastName());
-		userVO.setEmailID(user.getProperty("email").toString());
-		userVO.setGender(user.getProperty("gender").toString());
-		userVO.setLastLoggedInTime(CalendarUtil.getCurrentTime());
-		userVO.setLoggedInWith(LoggedInWith.Facebook);
-		return userVO;
 	}
 
 	private void updateStatus(boolean isSignedIn) {
@@ -224,28 +214,17 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 		try {
 			Person currentPerson = getCurrentPerson();
 			if (currentPerson != null) {
-				UserVO userVO = createGoogleUserAndStoreDetails(currentPerson);
+				UserDataFetcher userDataFetcher = UserDataFetcherFactory.getInstance().getUserDataFetcher(LoggedInWith.GooglePlus);
+				UserDetailsWrapper userDetailsWrapper = new UserDetailsWrapper();
+				userDetailsWrapper.setPerson(currentPerson);
+				userDetailsWrapper.setGoogleApiClient(getGoogleAPIClient());
+				userVO = userDataFetcher.fetchUserDetails(userDetailsWrapper);
 				logUserDetails(userVO);
 				updateStatus(true);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-
-	private UserVO createGoogleUserAndStoreDetails(Person currentPerson) {
-		
-		userVO = new UserVO();
-		Name name = currentPerson.getName();
-		userVO.setFirstName(name.getGivenName());
-		userVO.setLastName(name.getFamilyName());
-		userVO.setUserName(currentPerson.getDisplayName());
-		userVO.setGender(UserUtil.getGenderString(currentPerson.getGender()));
-		userVO.setEmailID(Plus.AccountApi.getAccountName(googleApiClient));
-		userVO.setLastLoggedInTime(CalendarUtil.getCurrentTime());
-		userVO.setLoggedInWith(LoggedInWith.GooglePlus);
-		return userVO;
 	}
 
 	private Person getCurrentPerson() {
