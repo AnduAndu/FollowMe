@@ -1,12 +1,12 @@
 package com.anduandu.followme;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import com.anduandu.activity.FacebookLoginActivity;
 import com.anduandu.activity.NoConnectionActivity;
 import com.anduandu.network.NetworkUtil;
 
-public class HomeScreen extends ActionBarActivity {
+public class HomeScreen extends Activity {
 
 	
 	@Override

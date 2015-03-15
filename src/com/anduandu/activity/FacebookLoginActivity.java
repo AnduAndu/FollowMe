@@ -63,11 +63,16 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 		
 		googleSignInButton = (SignInButton) findViewById(R.id.signinGoogle);
 		googleSignInButton.setOnClickListener(this);
+		setGoogleApiClient();
 		googleApiClient = getGoogleAPIClient();
 		googleSignOutButton = (Button) findViewById(R.id.googleLogout);
 		
 	}
 	
+	private void setGoogleApiClient() {
+		googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Plus.API, Plus.PlusOptions.builder().build()).addScope(Plus.SCOPE_PLUS_LOGIN).build();
+	}
+
 	private void logUserDetails(UserVO userVO) {
 		if(userVO != null) {
 			Log.i("First name", userVO.getFirstName());
@@ -84,7 +89,7 @@ public class FacebookLoginActivity extends Activity implements OnClickListener, 
 	}
 
 	private GoogleApiClient getGoogleAPIClient() {
-		return new GoogleApiClient.Builder(this).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(Plus.API, Plus.PlusOptions.builder().build()).addScope(Plus.SCOPE_PLUS_LOGIN).build();
+		return googleApiClient;
 	}
 
 
