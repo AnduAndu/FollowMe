@@ -33,8 +33,4 @@ public enum PasswordConstraints {
 	public String getConstraint() {
 		return constraint;
 	}
-	
-	
-	
-	
 }
